@@ -78,7 +78,7 @@ const SearchCorForCollege = () => {
 
     const [hasAccess, setHasAccess] = useState(null);
     const [loading, setLoading] = useState(false);
-    const pageId = 56;
+    const pageId = 125;
 
     const [employeeID, setEmployeeID] = useState("");
     const [dprtmntID, setDepartmentID] = useState("");
