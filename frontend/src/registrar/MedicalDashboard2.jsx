@@ -248,6 +248,39 @@ const MedicalDashboard2 = () => {
         navigate(steps[index].path); // Go to the clicked step’s page
     };
 
+    const handleGuardianChange = (e) => {
+        const { value } = e.target;
+
+        let updatedPerson = { ...person, guardian: value };
+
+        if (value === "Father") {
+            updatedPerson = {
+                ...updatedPerson,
+                guardian_family_name: person.father_family_name || "",
+                guardian_given_name: person.father_given_name || "",
+                guardian_middle_name: person.father_middle_name || "",
+                guardian_ext: person.father_ext || "",
+                guardian_nickname: person.father_nickname || "",
+                guardian_contact: person.father_contact || "",
+                guardian_email: person.father_email || "",
+            };
+        }
+
+        if (value === "Mother") {
+            updatedPerson = {
+                ...updatedPerson,
+                guardian_family_name: person.mother_family_name || "",
+                guardian_given_name: person.mother_given_name || "",
+                guardian_middle_name: person.mother_middle_name || "",
+                guardian_ext: person.mother_ext || "",
+                guardian_nickname: person.mother_nickname || "",
+                guardian_contact: person.mother_contact || "",
+                guardian_email: person.mother_email || "",
+            };
+        }
+
+        setPerson(updatedPerson);
+    };
 
 
 
@@ -696,9 +729,9 @@ const MedicalDashboard2 = () => {
 
             </Box>
 
-               <hr style={{ border: "1px solid #ccc", width: "100%" }} />
-      <br />
-      <br />
+            <hr style={{ border: "1px solid #ccc", width: "100%" }} />
+            <br />
+            <br />
 
 
 
@@ -1050,11 +1083,11 @@ const MedicalDashboard2 = () => {
                             {index < steps.length - 1 && (
                                 <Box
                                     sx={{
-                                           height: "2px",
-                    backgroundColor: mainButtonColor,
-                    flex: 1,
-                    alignSelf: "center",
-                    mx: 2,
+                                        height: "2px",
+                                        backgroundColor: mainButtonColor,
+                                        flex: 1,
+                                        alignSelf: "center",
+                                        mx: 2,
                                     }}
                                 />
                             )}
@@ -1381,7 +1414,7 @@ const MedicalDashboard2 = () => {
                                                 <Typography variant="subtitle2" mb={1}>Father Year Graduated</Typography>
                                                 <TextField
                                                     InputProps={{ readOnly: true }}
- type="number"
+                                                    type="number"
                                                     fullWidth
                                                     size="small"
                                                     name="father_year_graduated"
@@ -1800,7 +1833,7 @@ const MedicalDashboard2 = () => {
                                                 <Typography variant="subtitle2" mb={1}>Mother Year Graduated</Typography>
                                                 <TextField
                                                     InputProps={{ readOnly: true }}
- type="number"
+                                                    type="number"
                                                     fullWidth
                                                     size="small"
                                                     name="mother_year_graduated"
@@ -1944,7 +1977,7 @@ const MedicalDashboard2 = () => {
                                     name="guardian"
                                     value={person.guardian || ""}
                                     label="Guardian"
-                                    onChange={handleChange}
+                               onChange={handleGuardianChange}
                                     onBlur={handleBlur}
                                 >
                                     <MenuItem value=""><em>Select Guardian</em></MenuItem>

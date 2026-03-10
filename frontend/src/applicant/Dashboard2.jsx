@@ -149,6 +149,41 @@ const Dashboard2 = (props) => {
   };
 
 
+ const handleGuardianChange = (e) => {
+  const { value } = e.target;
+
+  let updatedPerson = { ...person, guardian: value };
+
+  if (value === "Father") {
+    updatedPerson = {
+      ...updatedPerson,
+      guardian_family_name: person.father_family_name || "",
+      guardian_given_name: person.father_given_name || "",
+      guardian_middle_name: person.father_middle_name || "",
+      guardian_ext: person.father_ext || "",
+      guardian_nickname: person.father_nickname || "",
+      guardian_contact: person.father_contact || "",
+      guardian_email: person.father_email || "",
+    };
+  }
+
+  if (value === "Mother") {
+    updatedPerson = {
+      ...updatedPerson,
+      guardian_family_name: person.mother_family_name || "",
+      guardian_given_name: person.mother_given_name || "",
+      guardian_middle_name: person.mother_middle_name || "",
+      guardian_ext: person.mother_ext || "",
+      guardian_nickname: person.mother_nickname || "",
+      guardian_contact: person.mother_contact || "",
+      guardian_email: person.mother_email || "",
+    };
+  }
+
+  setPerson(updatedPerson);
+};
+
+
   const fetchPersonData = async (id) => {
     try {
       const res = await axios.get(`${API_BASE_URL}/form/person/${id}`);
@@ -682,17 +717,17 @@ const Dashboard2 = (props) => {
                   {step.label}
                 </Typography>
               </Box>
-          {index < steps.length - 1 && (
-  <Box
-    sx={{
-      height: "2px",
-      backgroundColor: mainButtonColor,
-      flex: 1,
-      alignSelf: "center",
-      mx: 2,
-    }}
-  />
-)}
+              {index < steps.length - 1 && (
+                <Box
+                  sx={{
+                    height: "2px",
+                    backgroundColor: mainButtonColor,
+                    flex: 1,
+                    alignSelf: "center",
+                    mx: 2,
+                  }}
+                />
+              )}
             </React.Fragment>
           ))}
         </Box>
@@ -998,7 +1033,7 @@ const Dashboard2 = (props) => {
                         <TextField
                           fullWidth
                           size="small"
-                           type="number"
+                          type="number"
                           name="father_year_graduated"
                           placeholder="Enter Father Year Graduated"
                           value={person.father_year_graduated || ""}
@@ -1392,7 +1427,7 @@ const Dashboard2 = (props) => {
                         <TextField
                           fullWidth
                           size="small"
-                           type="number"
+                          type="number"
                           name="mother_year_graduated"
                           placeholder="Enter your Mother Year Graduated"
                           value={person.mother_year_graduated || ""}
@@ -1587,7 +1622,7 @@ const Dashboard2 = (props) => {
                   name="guardian"
                   value={person.guardian || ""}
                   label="Guardian"
-                  onChange={handleChange}
+                  onChange={handleGuardianChange}
                   onBlur={() => handleUpdate(person)}
                 >
                   <MenuItem value=""><em>Select Guardian</em></MenuItem>

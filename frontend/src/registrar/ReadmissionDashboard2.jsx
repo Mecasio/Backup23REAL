@@ -262,6 +262,39 @@ const ReadmissionDashboard2 = () => {
         navigate(steps[index].path); // Go to the clicked step’s page
     };
 
+const handleGuardianChange = (e) => {
+  const { value } = e.target;
+
+  let updatedPerson = { ...person, guardian: value };
+
+  if (value === "Father") {
+    updatedPerson = {
+      ...updatedPerson,
+      guardian_family_name: person.father_family_name || "",
+      guardian_given_name: person.father_given_name || "",
+      guardian_middle_name: person.father_middle_name || "",
+      guardian_ext: person.father_ext || "",
+      guardian_nickname: person.father_nickname || "",
+      guardian_contact: person.father_contact || "",
+      guardian_email: person.father_email || "",
+    };
+  }
+
+  if (value === "Mother") {
+    updatedPerson = {
+      ...updatedPerson,
+      guardian_family_name: person.mother_family_name || "",
+      guardian_given_name: person.mother_given_name || "",
+      guardian_middle_name: person.mother_middle_name || "",
+      guardian_ext: person.mother_ext || "",
+      guardian_nickname: person.mother_nickname || "",
+      guardian_contact: person.mother_contact || "",
+      guardian_email: person.mother_email || "",
+    };
+  }
+
+  setPerson(updatedPerson);
+};
 
 
 
@@ -1781,7 +1814,7 @@ const ReadmissionDashboard2 = () => {
                                     name="guardian"
                                     value={person.guardian || ""}
                                     label="Guardian"
-                                    onChange={handleChange}
+                                  onChange={handleGuardianChange}
                                     onBlur={handleBlur}
                                 >
                                      <MenuItem value=""><em>Select Guardian</em></MenuItem>
