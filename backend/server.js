@@ -7221,7 +7221,8 @@ app.get("/get_year_level", async (req, res) => {
 app.get("/get_active_semester", async (req, res) => {
   try {
     const semester = await db3.query(`
-      SELECT smt.semester_description FROM active_school_year_table AS sy
+      SELECT smt.semester_id, smt.semester_description
+      FROM active_school_year_table AS sy
       LEFT JOIN semester_table AS smt ON sy.semester_id = smt.semester_id
       WHERE sy.astatus = 1;
     `);
@@ -15704,7 +15705,7 @@ app.get("/api/ecat-summary", async (req, res) => {
 // ✅ CHECK PREREQUISITE BEFORE ENROLLMENT
 app.post("/api/check-prerequisite", async (req, res) => {
   try {
-    const { student_number, course_id } = req.body;
+    const { student_number, course_id, semester_id, curriculum_id } = req.body;
 
     if (!student_number || !course_id) {
       return res.status(400).json({
@@ -15729,6 +15730,8 @@ app.post("/api/check-prerequisite", async (req, res) => {
     }
 
     const { prereq, course_code } = courseRows[0];
+    console.log("Code and Prequiesite", prereq)
+    console.log("Code and Prequiesite", course_code)
 
     // If no prerequisite defined → allow enrollment
     if (!prereq || String(prereq).trim() === "") {
@@ -15775,11 +15778,46 @@ app.post("/api/check-prerequisite", async (req, res) => {
       });
     }
 
+    let applicablePrereqCourses = prereqCourses;
+
+    if (semester_id && curriculum_id) {
+      const prereqCourseIds = prereqCourses.map((p) => p.course_id);
+      const placeholders2 = prereqCourseIds.map(() => "?").join(", ");
+
+      const [tagRows] = await db3.query(
+        `
+        SELECT course_id, semester_id
+        FROM program_tagging_table
+        WHERE curriculum_id = ? AND course_id IN (${placeholders2})
+        `,
+        [curriculum_id, ...prereqCourseIds],
+      );
+
+      const prereqSemesterMap = new Map(
+        tagRows.map((row) => [row.course_id, row.semester_id]),
+      );
+
+      applicablePrereqCourses = prereqCourses.filter((p) => {
+        const prereqSemesterId = prereqSemesterMap.get(p.course_id);
+        if (!prereqSemesterId) return true; // keep if not tagged
+        return Number(prereqSemesterId) < Number(semester_id);
+      });
+
+      if (applicablePrereqCourses.length === 0) {
+        return res.json({
+          allowed: true,
+          status: "NO_APPLICABLE_PREREQ",
+          message:
+            "Prerequisites are not applicable for the selected semester.",
+        });
+      }
+    }
+
     const failedPrereq = [];
     const missingPrereq = [];
 
     // 4. For each prerequisite, check student's grade history in enrolled_subject
-    for (const prereqCourse of prereqCourses) {
+    for (const prereqCourse of applicablePrereqCourses) {
       const prereqCourseId = prereqCourse.course_id;
       const prereqCourseCode = prereqCourse.course_code;
 

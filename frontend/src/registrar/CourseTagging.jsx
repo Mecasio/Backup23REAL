@@ -219,6 +219,7 @@ const CourseTagging = () => {
   const [isenrolled, setIsEnrolled] = useState(null);
   const [disableYearButtons, setDisableYearButtons] = useState(false);
   const [activeSemester, setActiveSemester] = useState("");
+  const [activeSemesterId, setActiveSemesterId] = useState(null);
 
   // 🔍 Map of course_id -> { allowed, hasPrereq }
   const [prereqMap, setPrereqMap] = useState({});
@@ -264,8 +265,10 @@ const CourseTagging = () => {
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setActiveSemester(res.data[0].semester_description);
+          setActiveSemesterId(res.data[0].semester_id);
         } else {
           setActiveSemester("No Active Semester");
+          setActiveSemesterId(null);
         }
       })
       .catch((err) => console.error(err));
@@ -361,7 +364,7 @@ const CourseTagging = () => {
     }
   };
 
-  const isEnrolled = (course_id) =>
+  const isEnrolledCourse = (course_id) =>
     enrolled.some((item) => item.course_id === course_id);
 
   // ✅ Has prerequisite based on backend-computed map
@@ -372,13 +375,15 @@ const CourseTagging = () => {
 
 
   // 🔍 Helper to check prerequisites using backend (fixed)
-  const checkPrerequisite = async (student_number, course_id) => {
+  const checkPrerequisite = async (student_number, course) => {
     try {
       const { data } = await axios.post(
         `${API_BASE_URL}/api/check-prerequisite`,
         {
           student_number,
-          course_id,
+          course_id: course.course_id,
+          semester_id: course.semester_id,
+          curriculum_id: currId,
         }
       );
 
@@ -446,7 +451,7 @@ const CourseTagging = () => {
 
       for (const course of courses) {
         // Always ask backend about this course
-        const res = await checkPrerequisite(userId, course.course_id);
+        const res = await checkPrerequisite(userId, course);
 
         // Backend status tells us if the subject actually has a prerequisite
         let hasPrereq = true;
@@ -490,7 +495,7 @@ const CourseTagging = () => {
       return;
     }
 
-    if (isEnrolled(course.course_id)) {
+    if (isEnrolledCourse(course.course_id)) {
       return;
     }
 
@@ -572,7 +577,12 @@ const CourseTagging = () => {
 
 
   const addAllToCart = async (yearLevelId) => {
-    const newCourses = courses.filter((c) => !isEnrolled(c.course_id));
+    const newCourses = courses.filter(
+      (c) =>
+        !isEnrolledCourse(c.course_id) &&
+        c.year_level_id === yearLevelId &&
+        (activeSemesterId ? c.semester_id === activeSemesterId : true),
+    );
 
     if (!selectedSection) {
       setSnack({
@@ -844,7 +854,7 @@ const CourseTagging = () => {
       return;
     }
 
-    if (isEnrolled(course.course_id)) {
+    if (isEnrolledCourse(course.course_id)) {
       return;
     }
 
@@ -873,7 +883,7 @@ const CourseTagging = () => {
 
 
   // Wrapper: bulk enroll click → show modal if at least one course has prerequisite
-  const handleBulkEnrollClick = async (yearLevelId) => {
+  const handleBulkEnrollClick = async (yearLevelId, semesterLabel) => {
     if (!selectedSection) {
       setSnack({
         open: true,
@@ -893,7 +903,12 @@ const CourseTagging = () => {
       return;
     }
 
-    const newCourses = courses.filter((c) => !isEnrolled(c.course_id));
+    const newCourses = courses.filter(
+      (c) =>
+        !isEnrolledCourse(c.course_id) &&
+        c.year_level_id === yearLevelId &&
+        (activeSemesterId ? c.semester_id === activeSemesterId : true),
+    );
     if (newCourses.length === 0) return;
     
     console.log("Hello: ", newCourses);
@@ -917,7 +932,7 @@ const CourseTagging = () => {
       })
       .join("\n");
 
-    const msg = `You are trying to enroll multiple subjects that have prerequisites:\n\n${listText}\n\nGreen-highlighted rows mean the student meets the prerequisite qualification.\nOrange-highlighted rows mean the student does NOT meet the prerequisite qualification.\n\nDo you want to continue with bulk enrollment?`;
+    const msg = `${yearLevelId} - ${semesterLabel || "Semester"}, You are trying to enroll multiple subjects that have prerequisites:\n\n${listText}\n\nGreen-highlighted rows mean the student meets the prerequisite qualification.\nOrange-highlighted rows mean the student does NOT meet the prerequisite qualification.\n\nDo you want to continue with bulk enrollment?`;
 
     setPendingAction({ type: "bulk", yearLevelId });
     setConfirmDialogMessage(msg);
@@ -1435,7 +1450,7 @@ const CourseTagging = () => {
                       {subjectCounts[c.course_id] || 0}
                     </TableCell>
                     <TableCell style={{ border: `2px solid ${borderColor}`, textAlign: "center" }}>
-                      {!isEnrolled(c.course_id) ? (
+                      {!isEnrolledCourse(c.course_id) ? (
                         <Button
                           variant="contained"
                           size="small"
@@ -1539,6 +1554,7 @@ const CourseTagging = () => {
               ))}
             </TextField>
           )}
+
           <Typography variant="h6">Year Level Button</Typography>
           <Box sx={{ mb: 2 }}>
             <Box display="flex" gap={2} mt={2}>
@@ -1547,7 +1563,7 @@ const CourseTagging = () => {
                   key={index}
                   variant="contained"
                   color="success"
-                  onClick={() => handleBulkEnrollClick(year_level.year_level_id)}
+                  onClick={() => handleBulkEnrollClick(year_level.year_level_id, formatSemester(activeSemester))}
                   sx={{
                     minWidth: 125,
                     fontWeight: "bold",
