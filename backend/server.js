@@ -35,11 +35,11 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://192.168.50.77:5173',
-  'http://192.168.50.86:5173',
+  'http://192.168.50.58:5173',
   'http://192.168.50.211:5173',
   'http://136.239.248.58:5173',
-  'http://192.168.50.86:5173',
-  'http://192.168.50.86:5173',
+  'http://192.168.50.58:5173',
+  'http://192.168.50.58:5173',
 ];
 
 app.use(
