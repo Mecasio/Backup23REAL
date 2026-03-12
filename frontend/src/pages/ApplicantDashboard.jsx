@@ -631,10 +631,7 @@ const ApplicantDashboard = (props) => {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const role = localStorage.getItem("role");
-        const res = await axios.get(`${API_BASE_URL}/api/announcements?role=${role}`);
-
-        // ensure we get an array
+        const res = await axios.get(`${API_BASE_URL}/api/announcements/applicant`);
         setAnnouncements(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error(err);
@@ -1096,7 +1093,7 @@ const ApplicantDashboard = (props) => {
                           {a.file_path && (
                             <>
                               <img
-                                src={`${API_BASE_URL}/uploads/announcement/${a.file_path}`}
+                                src={`${API_BASE_URL}/uploads/Announcement/${a.file_path}`}
                                 alt={a.title}
                                 style={{
                                   width: "100%",

@@ -325,32 +325,26 @@ const StudentDashboard = ({ profileImage, setProfileImage }) => {
   }, [year]);
 
   const [openImage, setOpenImage] = useState(null);
+
   const [announcements, setAnnouncements] = useState([]);
-
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
-  const fetchAnnouncements = async () => {
-    try {
-      const res = await axios.get(`${API_BASE_URL}/api/announcements/student`);
-      setAnnouncements(res.data); // 👈 no .data.data
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const role = localStorage.getItem("role");
-        const res = await axios.get(`${API_BASE_URL}/api/announcements?role=${role}`);
-        const data = Array.isArray(res.data) ? res.data : res.data?.data;
-        setAnnouncements(data || []);
+
+        const email = localStorage.getItem("email");
+
+        const res = await axios.get(
+          `${API_BASE_URL}/api/announcements/user/${email}`
+        );
+
+        setAnnouncements(res.data.announcements || []);
+
       } catch (err) {
         console.error(err);
       }
     };
+
     fetchAnnouncements();
   }, []);
 
@@ -895,7 +889,7 @@ const StudentDashboard = ({ profileImage, setProfileImage }) => {
                           {a.file_path && (
                             <>
                               <img
-                                src={`${API_BASE_URL}/uploads/announcement/${a.file_path}`}
+                                src={`${API_BASE_URL}/uploads/Announcement/${a.file_path}`}
                                 alt={a.title}
                                 style={{
                                   width: "100%",
@@ -1061,8 +1055,6 @@ const StudentDashboard = ({ profileImage, setProfileImage }) => {
             </Card>
           </Grid>
         </Grid>
-
-
       </Box >
     </Box>
   );

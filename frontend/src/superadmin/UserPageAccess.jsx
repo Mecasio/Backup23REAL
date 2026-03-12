@@ -277,6 +277,65 @@ const UserPageAccess = () => {
     }
   };
 
+  const grantAllAccess = async () => {
+    if (!selectedUser) return;
+
+    try {
+
+      const updates = pages.map((p) =>
+        axios.post(`${API_BASE_URL}/api/page_access/${selectedUser.employee_id}/${p.id}`)
+      );
+
+      await Promise.all(updates);
+
+      const newAccess = {};
+      pages.forEach((p) => {
+        newAccess[p.id] = true;
+      });
+
+      setPageAccess(newAccess);
+
+      setSnack({
+        open: true,
+        severity: "success",
+        message: "All access granted",
+      });
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+  const revokeAllAccess = async () => {
+    if (!selectedUser) return;
+
+    try {
+
+      const updates = pages.map((p) =>
+        axios.delete(`${API_BASE_URL}/api/page_access/${selectedUser.employee_id}/${p.id}`)
+      );
+
+      await Promise.all(updates);
+
+      const newAccess = {};
+      pages.forEach((p) => {
+        newAccess[p.id] = false;
+      });
+
+      setPageAccess(newAccess);
+
+      setSnack({
+        open: true,
+        severity: "success",
+        message: "All access removed",
+      });
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (hasAccess === false) return <Unauthorized />;
 
   return (
@@ -875,6 +934,23 @@ const UserPageAccess = () => {
         </DialogTitle>
 
         <DialogContent dividers sx={{ maxHeight: "70vh" }}>
+          <Box display="flex" gap={2} mb={2}>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={grantAllAccess}
+            >
+              Grant All Access
+            </Button>
+
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={revokeAllAccess}
+            >
+              Remove All Access
+            </Button>
+          </Box>
           <Paper sx={{ border: `2px solid ${borderColor}` }}>
             <TableContainer>
               <Table>

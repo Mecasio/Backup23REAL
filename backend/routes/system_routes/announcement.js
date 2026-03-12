@@ -226,11 +226,53 @@ router.get("/announcements/faculty", async (req, res) => {
 router.get("/announcements/applicant", async (req, res) => {
   try {
     const [rows] = await db.execute(
-      "SELECT * FROM announcements WHERE target_role = 'applicant' AND expires_at > NOW() ORDER BY created_at DESC"
+      `SELECT * FROM announcements 
+       WHERE target_role = 'applicant'
+       AND (expires_at > NOW() OR expires_at IS NULL)
+       ORDER BY created_at DESC`
     );
+
     res.json(rows);
   } catch (err) {
     console.error("Error fetching applicant announcements:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+router.get("/announcements/user/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+
+    // 1️⃣ get role from db3
+    const [users] = await db3.execute(
+      "SELECT role FROM user_accounts WHERE email = ?",
+      [email]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const role = users[0].role;
+
+    // 2️⃣ fetch announcements for that role
+    const [announcements] = await db.execute(
+      `SELECT *
+       FROM announcements
+       WHERE target_role = ?
+       AND (expires_at > NOW() OR expires_at IS NULL)
+       ORDER BY created_at DESC`,
+      [role]
+    );
+
+    res.json({
+      role: role,
+      announcements: announcements
+    });
+
+  } catch (err) {
+    console.error("Error fetching announcements:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
