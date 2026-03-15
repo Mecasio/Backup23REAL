@@ -171,11 +171,7 @@ const AdminApplicantList = () => {
       to: "/student_requirements",
       icon: <AssignmentIcon fontSize="large" />,
     },
-    {
-      label: "Examination Profile",
-      to: "/registrar_examination_profile",
-      icon: <PersonSearchIcon fontSize="large" />,
-    },
+
     {
       label: "Entrance Examination Score",
       to: "/applicant_scoring",

@@ -645,7 +645,7 @@ const Dashboard = ({ profileImage, setProfileImage }) => {
               </FormControl>
 
               <Typography fontWeight="bold" mb={1}>Academic Program Distribution</Typography>
-              <Box sx={{ width: "100%", height: 220, mb: 3 }}>
+              <Box sx={{ width: "100%", height: 245, mb: 3 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={programData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -660,7 +660,7 @@ const Dashboard = ({ profileImage, setProfileImage }) => {
               </Box>
 
               <Typography fontWeight="bold" mb={1}>Student Classification</Typography>
-              <Box sx={{ width: "100%", height: 220 }}>
+              <Box sx={{ width: "100%", height: 245 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={studentTypeData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -710,7 +710,7 @@ const Dashboard = ({ profileImage, setProfileImage }) => {
                   { label: "Female", value: applicant.female },
                 ].map((item, i) => (
                   <Grid item xs={4} key={i}>
-                    <Box sx={{ p: 1.5, background: "#FCBEBB", borderRadius: 2, border: "2px solid black", textAlign: "center" }}>
+                    <Box sx={{ p: 3, background: "#FCBEBB", height: "100px", borderRadius: 2, border: "2px solid black", textAlign: "center" }}>
                       <Typography variant="h5" fontWeight="bold">{item.value}</Typography>
                       <Typography fontSize={12}>{item.label}</Typography>
                     </Box>
@@ -723,7 +723,7 @@ const Dashboard = ({ profileImage, setProfileImage }) => {
               </Typography>
 
               <Box sx={{
-                flex: 1, minHeight: 260,
+                flex: 1, minHeight: 475,
                 background: "#f1f3f4", border: "2px solid black", borderRadius: 3,
                 display: "flex", justifyContent: "center", alignItems: "center",
               }}>

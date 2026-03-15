@@ -99,7 +99,7 @@ const CourseTagging = () => {
   const [userRole, setUserRole] = useState("");
 
   const pageId = 17;
-  
+
   const [employeeID, setEmployeeID] = useState("");
 
   useEffect(() => {
@@ -146,31 +146,8 @@ const CourseTagging = () => {
     }
   };
 
-  const tabs = [
-    { label: "Admission Process For College", to: "/applicant_list", icon: <SchoolIcon fontSize="large" /> },
-    { label: "Applicant Form", to: "/registrar_dashboard1", icon: <AssignmentIcon fontSize="large" /> },
-    { label: "Student Requirements", to: "/registrar_requirements", icon: <AssignmentTurnedInIcon fontSize="large" /> },
-    { label: "Qualifying / Interview Exam Score", to: "/qualifying_interview_exam_scores", icon: <ScoreIcon fontSize="large" /> },
-    { label: "Student Numbering", to: "/student_numbering_per_college", icon: <DashboardIcon fontSize="large" /> },
-    { label: "Course Tagging", to: "/course_tagging", icon: <MenuBookIcon fontSize="large" /> },
-    {
-      label: (
-        <>
-          Certificate of <br />
-          Registration
-        </>
-      ),
-      to: "/search_cor_for_college",
-      icon: <SearchIcon fontSize="large" />,
-    },
 
-  ];
 
-  const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState(5);
-  const [clickedSteps, setClickedSteps] = useState(
-    Array(tabs.length).fill(false)
-  );
 
   const handleStepClick = (index, to) => {
     setActiveStep(index);
@@ -349,7 +326,7 @@ const CourseTagging = () => {
       const courseRes = await axios.get(
         `${API_BASE_URL}/api/search-student/${sectionId}`
       );
-      
+
       if (courseRes.data.length > 0) {
         setCurr(courseRes.data[0].curriculum_id);
         setCourseCode(courseRes.data[0].program_code);
@@ -910,7 +887,7 @@ const CourseTagging = () => {
         (activeSemesterId ? c.semester_id === activeSemesterId : true),
     );
     if (newCourses.length === 0) return;
-    
+
     console.log("Hello: ", newCourses);
 
     const coursesWithPrereq = newCourses.filter((c) => hasCoursePrereq(c));
@@ -1030,82 +1007,7 @@ const CourseTagging = () => {
 
       <hr style={{ border: "1px solid #ccc", width: "100%" }} />
       <br />
-
-
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "nowrap", // ❌ prevent wrapping
-          width: "100%",
-          mt: 2,
-        }}
-      >
-        {tabs.map((tab, index) => (
-          <React.Fragment key={index}>
-            <Card
-              onClick={() => handleStepClick(index, tab.to)}
-              sx={{
-                flex: 1,
-                maxWidth: `${100 / tabs.length}%`,
-                height: 140,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                borderRadius: 2,
-                border: `2px solid ${borderColor}`,
-                backgroundColor:
-                  activeStep === index
-                    ? settings?.header_color || "#1976d2"
-                    : "#E8C999",
-                color: activeStep === index ? "#fff" : "#000",
-                boxShadow:
-                  activeStep === index
-                    ? "0px 4px 10px rgba(0,0,0,0.3)"
-                    : "0px 2px 6px rgba(0,0,0,0.15)",
-                transition: "0.3s ease",
-                "&:hover": {
-                  backgroundColor:
-                    activeStep === index ? "#000000" : "#f5d98f",
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Box sx={{ fontSize: 32, mb: 0.5 }}>{tab.icon}</Box>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {tab.label}
-                </Typography>
-              </Box>
-            </Card>
-            {index < tabs.length - 1 && (
-              <Box
-                sx={{
-                  flex: 0.1,
-                  mx: 1,
-                }}
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </Box>
-
-      <div style={{ height: "40px" }}></div>
-
+      <br />
       <Box
         sx={{
           display: "flex",

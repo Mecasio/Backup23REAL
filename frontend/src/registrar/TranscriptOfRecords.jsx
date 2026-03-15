@@ -590,35 +590,7 @@ const TOR = () => {
 
             <hr style={{ border: "1px solid #ccc", width: "100%" }} />
             <br />
-            <TableContainer component={Paper} sx={{ width: '100%' }}>
-                <Table>
-                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", border: `2px solid ${borderColor}`, }}>
-                        <TableRow>
-                            {/* Left cell: Student Number */}
-                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
-                                Student Number:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {studentData.student_number || "N/A"}
-
-                                </span>
-                            </TableCell>
-
-                            {/* Right cell: Student Name */}
-                            <TableCell
-                                align="right"
-                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
-                            >
-                                Student Name:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {studentData && studentData.last_name
-                                        ? `${studentData.last_name.toUpperCase()}, ${studentData.first_name.toUpperCase()} ${studentData.middle_name.toUpperCase()}`
-                                        : "N/A"}
-                                </span>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </TableContainer>
+            
             <br />
             <Box
                 sx={{
@@ -774,6 +746,39 @@ const TOR = () => {
                     }
                 `}
             </style>
+
+            <TableContainer component={Paper} sx={{ width: '100%' }}>
+                <Table>
+                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", border: `2px solid ${borderColor}`, }}>
+                        <TableRow>
+                            {/* Left cell: Student Number */}
+                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
+                                Student Number:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {studentData.student_number || "N/A"}
+
+                                </span>
+                            </TableCell>
+
+                            {/* Right cell: Student Name */}
+                            <TableCell
+                                align="right"
+                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
+                            >
+                                Student Name:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {studentData && studentData.last_name
+                                        ? `${studentData.last_name.toUpperCase()}, ${studentData.first_name.toUpperCase()} ${studentData.middle_name.toUpperCase()}`
+                                        : "N/A"}
+                                </span>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+            </TableContainer>
+<br/>
+
+
             <Box style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Box style={{ background: "white", height: "12rem" }}>
                     <TableContainer component={Paper} elevation={3}>

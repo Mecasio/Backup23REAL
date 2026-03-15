@@ -124,7 +124,6 @@ const ApplicantScoring = () => {
         { label: "Admission Process for Registrar", to: "/applicant_list_admin", icon: <SchoolIcon fontSize="large" /> },
         { label: "Applicant Form", to: "/admin_dashboard1", icon: <DashboardIcon fontSize="large" /> },
         { label: "Student Requirements", to: "/student_requirements", icon: <AssignmentIcon fontSize="large" /> },
-        { label: "Examination Profile", to: "/registrar_examination_profile", icon: <PersonSearchIcon fontSize="large" /> },
         { label: "Entrance Examination Score", to: "/applicant_scoring", icon: <PersonSearchIcon fontSize="large" /> },
 
 
@@ -183,7 +182,7 @@ const ApplicantScoring = () => {
 
 
     const navigate = useNavigate();
-    const [activeStep, setActiveStep] = useState(4);
+    const [activeStep, setActiveStep] = useState(3);
     const [clickedSteps, setClickedSteps] = useState(Array(tabs.length).fill(false));
 
 

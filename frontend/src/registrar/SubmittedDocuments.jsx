@@ -904,35 +904,7 @@ const MedicalRequirements = () => {
 
             <hr style={{ border: "1px solid #ccc", width: "100%" }} />
             <br />
-            <TableContainer component={Paper} sx={{ width: '100%', border: `2px solid ${borderColor}` }}>
-                <Table>
-                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", }}>
-                        <TableRow>
-                            {/* Left cell: Student ID */}
-                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
-                                Student Number:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {selectedPerson?.student_number || person?.student_number || "N/A"}
-                                </span>
-                            </TableCell>
-
-                            {/* Right cell: Student Name, right-aligned */}
-                            <TableCell
-                                align="right"
-                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
-                            >
-                                Student Name:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {(selectedPerson?.last_name || person?.last_name || "").toUpperCase()},
-                                    &nbsp;{(selectedPerson?.first_name || person?.first_name || "").toUpperCase()}{" "}
-                                    {(selectedPerson?.middle_name || person?.middle_name || "").toUpperCase()}{" "}
-                                    {(selectedPerson?.extension || person?.extension || "").toUpperCase()}
-                                </span>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </TableContainer>
+           
             <br />
                 <Box
                     sx={{
@@ -991,6 +963,35 @@ const MedicalRequirements = () => {
 
             <br />
             {/* Student ID and Name */}
+             <TableContainer component={Paper} sx={{ width: '100%', border: `2px solid ${borderColor}` }}>
+                <Table>
+                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", }}>
+                        <TableRow>
+                            {/* Left cell: Student ID */}
+                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
+                                Student Number:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {selectedPerson?.student_number || person?.student_number || "N/A"}
+                                </span>
+                            </TableCell>
+
+                            {/* Right cell: Student Name, right-aligned */}
+                            <TableCell
+                                align="right"
+                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
+                            >
+                                Student Name:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {(selectedPerson?.last_name || person?.last_name || "").toUpperCase()},
+                                    &nbsp;{(selectedPerson?.first_name || person?.first_name || "").toUpperCase()}{" "}
+                                    {(selectedPerson?.middle_name || person?.middle_name || "").toUpperCase()}{" "}
+                                    {(selectedPerson?.extension || person?.extension || "").toUpperCase()}
+                                </span>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+            </TableContainer>
             <TableContainer component={Paper} sx={{ width: '100%', border: `2px solid ${borderColor}`, }}>
                 {/* SHS GWA and Height row below Student Name */}
                 <Box sx={{ px: 2, mb: 2, mt: 2 }}>

@@ -260,7 +260,7 @@ const ReportOfGrade = () => {
 
                     const detailsRes = await fetch(`${API_BASE_URL}/api/program_evaluation/details/${searchQuery}`);
                     const detailsData = await detailsRes.json();
-                    
+
                     if (Array.isArray(detailsData) && detailsData.length > 0) {
                         setStudentDetails(detailsData);
                     } else {
@@ -385,7 +385,7 @@ const ReportOfGrade = () => {
 
     // Put this at the very bottom before the return 
     if (loading || hasAccess === null) {
-       return <LoadingOverlay open={loading} message="Loading..." />;
+        return <LoadingOverlay open={loading} message="Loading..." />;
     }
 
     if (!hasAccess) {
@@ -395,7 +395,7 @@ const ReportOfGrade = () => {
     }
 
     return (
-          <Box sx={{ height: "calc(100vh - 150px)", overflowY: "auto", paddingRight: 1, backgroundColor: "transparent", mt: 1, padding: 2 }}>
+        <Box sx={{ height: "calc(100vh - 150px)", overflowY: "auto", paddingRight: 1, backgroundColor: "transparent", mt: 1, padding: 2 }}>
             <Box
                 sx={{
                     display: "flex",
@@ -490,35 +490,7 @@ const ReportOfGrade = () => {
 
             <hr style={{ border: "1px solid #ccc", width: "100%" }} />
             <br />
-            <TableContainer component={Paper} sx={{ width: '100%' }}>
-                <Table>
-                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", border: `2px solid ${borderColor}`, }}>
-                        <TableRow>
-                            {/* Left cell: Student Number */}
-                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
-                                Student Number:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {studentData.student_number || "N/A"}
 
-                                </span>
-                            </TableCell>
-
-                            {/* Right cell: Student Name */}
-                            <TableCell
-                                align="right"
-                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
-                            >
-                                Student Name:&nbsp;
-                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
-                                    {studentData && studentData.last_name
-                                        ? `${studentData.last_name.toUpperCase()}, ${studentData.first_name.toUpperCase()} ${studentData.middle_name.toUpperCase()}`
-                                        : "N/A"}
-                                </span>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </TableContainer>
             <br />
 
             <Box
@@ -538,7 +510,7 @@ const ReportOfGrade = () => {
                             sx={{
                                 flex: 1,
                                 maxWidth: `${100 / tabs1.length}%`, // evenly fit 100%
-                                     height: 140,
+                                height: 140,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -627,11 +599,31 @@ const ReportOfGrade = () => {
                 }
                 `}
             </style>
-            <TableContainer component={Paper} sx={{ width: '100%', border: `2px solid ${borderColor}`, }}>
+            <TableContainer component={Paper} sx={{ width: '100%' }}>
                 <Table>
-                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", }}>
+                    <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2", border: `2px solid ${borderColor}`, }}>
                         <TableRow>
-                            <TableCell sx={{ color: 'white', textAlign: "left" }}>Student Information:</TableCell>
+                            {/* Left cell: Student Number */}
+                            <TableCell sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}>
+                                Student Number:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {studentData.student_number || "N/A"}
+
+                                </span>
+                            </TableCell>
+
+                            {/* Right cell: Student Name */}
+                            <TableCell
+                                align="right"
+                                sx={{ color: 'white', fontSize: '20px', fontFamily: 'Arial Black', border: 'none' }}
+                            >
+                                Student Name:&nbsp;
+                                <span style={{ fontFamily: "Arial", fontWeight: "normal", textDecoration: "underline" }}>
+                                    {studentData && studentData.last_name
+                                        ? `${studentData.last_name.toUpperCase()}, ${studentData.first_name.toUpperCase()} ${studentData.middle_name.toUpperCase()}`
+                                        : "N/A"}
+                                </span>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                 </Table>

@@ -34,12 +34,12 @@ import EaristLogo from "../assets/EaristLogo.png";
    Dynamic styles — re-injected when settings change
 ───────────────────────────────────────────── */
 function buildSidebarStyles(s = {}) {
-  const accent      = s.main_button_color  || "#7c3aed";
-  const border      = s.border_color       || "#e8e8e8";
-  const titleColor  = s.title_color        || "#111111";
-  const subColor    = s.subtitle_color     || "#777777";
-  const subBtnColor = s.sub_button_color   || "#f5f5f5";
-  const profileBg   = s.header_color       ? `${s.header_color}18` : "#f7f7f7";
+  const accent = s.main_button_color || "#7c3aed";
+  const border = s.border_color || "#e8e8e8";
+  const titleColor = s.title_color || "#111111";
+  const subColor = s.subtitle_color || "#777777";
+  const subBtnColor = s.sub_button_color || "#f5f5f5";
+  const profileBg = s.header_color ? `${s.header_color}18` : "#f7f7f7";
 
   return `
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
@@ -369,7 +369,7 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
     if (!employeeID) return;
     axios.get(`${API_BASE_URL}/api/access_level/${employeeID}`)
       .then((res) => setAccessDescription(res.data?.access_description || ""))
-      .catch(() => {});
+      .catch(() => { });
   }, [employeeID]);
 
   useEffect(() => {
@@ -381,7 +381,7 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
     try {
       const res = await axios.get(`${API_BASE_URL}/api/person_data/${person_id}/${r}`);
       setPersonData(res.data);
-    } catch {}
+    } catch { }
   };
 
   const fetchUserAccessList = async (empID) => {
@@ -392,7 +392,7 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
         return acc;
       }, {});
       setUserAccessList(map);
-    } catch {}
+    } catch { }
   };
 
   const Logout = () => {
@@ -416,7 +416,7 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
       const updated = await axios.get(`${API_BASE_URL}/api/person_data/${person_id}/${r}`);
       setPersonData(updated.data);
       setProfileImage(`${API_BASE_URL}/uploads/${uploadDir}/${updated.data.profile_image}?t=${Date.now()}`);
-    } catch {}
+    } catch { }
   };
 
   const uploadHandlers = {
@@ -452,142 +452,175 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
 
   // ── registrar menu data (same as original) ──
   const admissionMenuGroups = [
-    { key: "admissionOffice", label: "Admission Office", icon: AdminPanelSettings, items: [
-      { title: "Applicant List", link: "/applicant_list_admin", icon: ListAltOutlined, page_id: 7 },
-      { title: "Applicant Form", link: "/admin_dashboard1", icon: AccountCircle, page_id: 1 },
-      { title: "Documents Submitted", link: "/student_requirements", icon: Description, page_id: 61 },
-      { title: "Room Registration", link: "/room_registration", icon: MeetingRoom, page_id: 52 },
-      { title: "Exam Room Assignment", link: "/assign_entrance_exam", icon: MeetingRoom, page_id: 9 },
-      { title: "Exam Schedule Mgmt", link: "/assign_schedule_applicant", icon: EditCalendar, page_id: 11 },
-      { title: "Proctor's Applicant List", link: "/admission_schedule_room_list", icon: People, page_id: 33 },
-      { title: "Entrance Exam Scores", link: "/applicant_scoring", icon: Score, page_id: 8 },
-      { title: "Examination Permit", link: "/registrar_examination_profile", icon: Badge, page_id: 48 },
-      { title: "Verify Documents Schedule", link: "/verify_document_schedule", icon: People, page_id: 115 },
-      { title: "Verify Documents", link: "/verify_schedule", icon: People, page_id: 118 },
-      { title: "Evaluator Schedule Mgmt", link: "/evaluator_schedule_room_list", icon: People, page_id: 119 },
-      { title: "Announcement", link: "/announcement_for_admission", icon: Campaign, page_id: 98 },
-      { title: "Program Slot Remaining", link: "/program_slot_limit", icon: People, page_id: 110 },
-    ]},
-    { key: "enrollmentOfficer", label: "Enrollment Officer", icon: AssignmentIndIcon, items: [
-      { title: "Applicant List", link: "/applicant_list", icon: ListAlt, page_id: 6 },
-      { title: "Applicant Form", link: "/registrar_dashboard1", icon: AccountCircle, page_id: 43 },
-      { title: "Documents Submitted", link: "/registrar_requirements", icon: FolderCopy, page_id: 49 },
-      { title: "Qualifying / Interview Scores", link: "/qualifying_interview_exam_scores", icon: Assessment, page_id: 37 },
-      { title: "Student Numbering", link: "/student_numbering_per_college", icon: FormatListNumbered, page_id: 60 },
-      { title: "Course Tagging", link: "/course_tagging_for_college", icon: Class, page_id: 124 },
-      { title: "Qualifying Room Mgmt", link: "/assign_qualifying_interview_exam", icon: MeetingRoom, page_id: 10 },
-      { title: "Qualifying Schedule Mgmt", link: "/assign_schedule_applicants_qualifying_interview", icon: EditCalendar, page_id: 12 },
-      { title: "Interviewer Applicant List", link: "/enrollment_schedule_room_list", icon: People, page_id: 36 },
-      { title: "Search COR", link: "/search_cor_for_college", icon: Search, page_id: 125 },
-    ]},
-    { key: "medicalDental", label: "Medical & Dental", icon: MedicalServices, items: [
-      { title: "Applicant List", link: "/medical_applicant_list", icon: ListAltOutlined, page_id: 24 },
-      { title: "Applicant Form", link: "/medical_dashboard1", icon: AccountCircle, page_id: 25 },
-      { title: "Documents Submitted", link: "/medical_requirements", icon: Description, page_id: 30 },
-      { title: "Medical Requirements", link: "/medical_requirements_form", icon: MedicalServices, page_id: 31 },
-      { title: "Dental Assessment", link: "/dental_assessment", icon: HealthAndSafety, page_id: 19 },
-      { title: "Physical & Neuro Exam", link: "/physical_neuro_exam", icon: Psychology, page_id: 32 },
-      { title: "Health Records Certificate", link: "/health_record", icon: ContactEmergency },
-      { title: "Medical Certificate", link: "/medical_certificate", icon: MedicalServices },
-    ]},
-    { key: "registrarOffice", label: "Registrar's Office", icon: HistoryEdu, items: [
-      { title: "Applicant List", link: "/super_admin_applicant_list", icon: ListAltOutlined, page_id: 80 },
-      { title: "Student Numbering Panel", link: "/student_numbering", icon: Numbers, page_id: 59 },
-      { title: "Course Tagging", link: "/course_tagging", icon: Class, page_id: 17 },
-      { title: "Student List", link: "/student_list", icon: ListAltOutlined, page_id: 104 },
-      { title: "Applicant Form", link: "/readmission_dashboard1", icon: AccountCircle, page_id: 38 },
-      { title: "Submitted Documents", link: "/submitted_documents", icon: Description, page_id: 106 },
-      { title: "Class List", link: "/class_roster", icon: Class, page_id: 15 },
-      { title: "Search COR", link: "/search_cor", icon: Search, page_id: 56 },
-      { title: "Report of Grades", link: "/report_of_grades", icon: Assessment, page_id: 50 },
-      { title: "Transcript of Records", link: "/transcript_of_records", icon: HistoryEdu, page_id: 62 },
-      { title: "Grading Evaluation", link: "/grading_evaluation_for_registrar", icon: FactCheck, page_id: 105 },
-      { title: "COR Exporting Module", link: "/cor_exporting_module", icon: FolderCopy, page_id: 117 },
-    ]},
+    {
+      key: "admissionOffice", label: "Admission Office", icon: AdminPanelSettings, items: [
+        { title: "Applicant List", link: "/applicant_list_admin", icon: ListAltOutlined, page_id: 7 },
+        { title: "Applicant Form", link: "/admin_dashboard1", icon: AccountCircle, page_id: 1 },
+        { title: "Documents Submitted", link: "/student_requirements", icon: Description, page_id: 61 },
+        { title: "Room Registration", link: "/room_registration", icon: MeetingRoom, page_id: 52 },
+        { title: "Verify Documents Schedule", link: "/verify_document_schedule", icon: People, page_id: 115 },
+        { title: "Verify Documents", link: "/verify_schedule", icon: People, page_id: 118 },
+        { title: "Evaluator Schedule Mgmt", link: "/evaluator_schedule_room_list", icon: People, page_id: 119 },
+        { title: "Exam Room Assignment", link: "/assign_entrance_exam", icon: MeetingRoom, page_id: 9 },
+        { title: "Exam Schedule Mgmt", link: "/assign_schedule_applicant", icon: EditCalendar, page_id: 11 },
+        { title: "Proctor's Applicant List", link: "/admission_schedule_room_list", icon: People, page_id: 33 },
+        { title: "Examination Permit", link: "/registrar_examination_profile", icon: Badge, page_id: 48 },
+        { title: "Entrance Exam Scores", link: "/applicant_scoring", icon: Score, page_id: 8 },
+        { title: "Announcement", link: "/announcement_for_admission", icon: Campaign, page_id: 98 },
+        { title: "Program Slot Remaining", link: "/program_slot_limit", icon: People, page_id: 110 },
+      ]
+    },
+    {
+      key: "enrollmentOfficer", label: "Enrollment Officer", icon: AssignmentIndIcon, items: [
+        { title: "Applicant List", link: "/applicant_list", icon: ListAlt, page_id: 6 },
+        { title: "Applicant Form", link: "/registrar_dashboard1", icon: AccountCircle, page_id: 43 },
+        { title: "Documents Submitted", link: "/registrar_requirements", icon: FolderCopy, page_id: 49 },
+        { title: "Qualifying / Interview Scores", link: "/qualifying_interview_exam_scores", icon: Assessment, page_id: 37 },
+        { title: "Student Numbering", link: "/student_numbering_per_college", icon: FormatListNumbered, page_id: 60 },
+        { title: "Course Tagging", link: "/course_tagging_for_college", icon: Class, page_id: 124 },
+        { title: "Search COR", link: "/search_cor_for_college", icon: Search, page_id: 125 },
+        { title: "Qualifying Room Mgmt", link: "/assign_qualifying_interview_exam", icon: MeetingRoom, page_id: 10 },
+        { title: "Qualifying Schedule Mgmt", link: "/assign_schedule_applicants_qualifying_interview", icon: EditCalendar, page_id: 12 },
+        { title: "Interviewer Applicant List", link: "/enrollment_schedule_room_list", icon: People, page_id: 36 },
+
+      ]
+    },
+    {
+      key: "medicalDental", label: "Medical & Dental", icon: MedicalServices, items: [
+        { title: "Applicant List", link: "/medical_applicant_list", icon: ListAltOutlined, page_id: 24 },
+        { title: "Applicant Form", link: "/medical_dashboard1", icon: AccountCircle, page_id: 25 },
+        { title: "Documents Submitted", link: "/medical_requirements", icon: Description, page_id: 30 },
+        { title: "Medical Requirements", link: "/medical_requirements_form", icon: MedicalServices, page_id: 31 },
+        { title: "Dental Assessment", link: "/dental_assessment", icon: HealthAndSafety, page_id: 19 },
+        { title: "Physical & Neuro Exam", link: "/physical_neuro_exam", icon: Psychology, page_id: 32 },
+        { title: "Health Records Certificate", link: "/health_record", icon: ContactEmergency },
+        { title: "Medical Certificate", link: "/medical_certificate", icon: MedicalServices },
+      ]
+    },
+    {
+      key: "registrarOffice", label: "Registrar's Office", icon: HistoryEdu, items: [
+        { title: "Applicant List", link: "/super_admin_applicant_list", icon: ListAltOutlined, page_id: 80 },
+        { title: "Student Numbering Panel", link: "/student_numbering", icon: Numbers, page_id: 59 },
+        { title: "Course Tagging", link: "/course_tagging", icon: Class, page_id: 17 },
+        { title: "Student List", link: "/student_list", icon: ListAltOutlined, page_id: 104 },
+        { title: "Applicant Form", link: "/readmission_dashboard1", icon: AccountCircle, page_id: 38 },
+        { title: "Submitted Documents", link: "/submitted_documents", icon: Description, page_id: 106 },
+        { title: "Class List", link: "/class_roster", icon: Class, page_id: 15 },
+        { title: "Search COR", link: "/search_cor", icon: Search, page_id: 56 },
+        { title: "Report of Grades", link: "/report_of_grades", icon: Assessment, page_id: 50 },
+        { title: "Transcript of Records", link: "/transcript_of_records", icon: HistoryEdu, page_id: 62 },
+        { title: "Grading Evaluation", link: "/grading_evaluation_for_registrar", icon: FactCheck, page_id: 105 },
+        { title: "COR Exporting Module", link: "/cor_exporting_module", icon: FolderCopy, page_id: 117 },
+      ]
+    },
   ];
 
   const courseMenuGroups = [
-    { key: "courseManagement", label: "Course Management", icon: MenuBook, items: [
-      { title: "Program Tagging Panel", link: "/program_tagging", icon: CollectionsBookmark, page_id: 35 },
-      { title: "Program Payment", link: "/program_payment", icon: LibraryBooks, page_id: 111 },
-      { title: "Program Panel Form", link: "/program_panel", icon: LibraryBooks, page_id: 34 },
-      { title: "Create Curriculum", link: "/curriculum_panel", icon: EditNote, page_id: 18 },
-      { title: "Course Panel Form", link: "/course_panel", icon: MenuBook, page_id: 16 },
-      { title: "Program Unit", link: "/program_unit", icon: MenuBook, page_id: 113 },
-      { title: "Prerequisite", link: "/prerequisite", icon: MenuBook, page_id: 112 },
-    ]},
+    {
+      key: "courseManagement", label: "Course Management", icon: MenuBook, items: [
+        { title: "Program Tagging Panel", link: "/program_tagging", icon: CollectionsBookmark, page_id: 35 },
+        { title: "Program Panel Form", link: "/program_panel", icon: LibraryBooks, page_id: 34 },
+        { title: "Create Curriculum", link: "/curriculum_panel", icon: EditNote, page_id: 18 },
+        { title: "Course Panel Form", link: "/course_panel", icon: MenuBook, page_id: 16 },
+        { title: "Program Payment", link: "/program_payment", icon: LibraryBooks, page_id: 111 },
+        { title: "Program Unit", link: "/program_unit", icon: MenuBook, page_id: 113 },
+        { title: "Prerequisite", link: "/prerequisite", icon: MenuBook, page_id: 112 },
+      ]
+    },
   ];
 
   const departmentMenuGroups = [
-    { key: "departmentManagement", label: "Department Management", icon: Apartment, items: [
-      { title: "Schedule Plotting Form", link: "/select_college", icon: EventNote, page_id: 53 },
-      { title: "Department Section Panel", link: "/department_section_panel", icon: Apartment, page_id: 20 },
-      { title: "Department Panel", link: "/department_registration", icon: Assignment, page_id: 21 },
-      { title: "Department Room Panel", link: "/department_room", icon: MeetingRoom, page_id: 22 },
-      { title: "Department Curriculum Panel", link: "/department_curriculum_panel", icon: MenuBook, page_id: 107 },
-      { title: "College Schedule Plotting", link: "/college_schedule_plotting", icon: EventNote, page_id: 108 },
-    ]},
+    {
+      key: "departmentManagement", label: "Department Management", icon: Apartment, items: [
+        { title: "Schedule Plotting Form", link: "/select_college", icon: EventNote, page_id: 53 },
+        { title: "Department Section Panel", link: "/department_section_panel", icon: Apartment, page_id: 20 },
+        { title: "Department Panel", link: "/department_registration", icon: Assignment, page_id: 21 },
+        { title: "Department Room Panel", link: "/department_room", icon: MeetingRoom, page_id: 22 },
+        { title: "Department Curriculum Panel", link: "/department_curriculum_panel", icon: MenuBook, page_id: 107 },
+        { title: "College Schedule Plotting", link: "/college_schedule_plotting", icon: EventNote, page_id: 108 },
+      ]
+    },
   ];
 
   const systemMenuGroups = [
-    { key: "roomRequirements", label: "Room & Requirements", icon: MeetingRoom, items: [
-      { title: "Room Form", link: "/super_admin_room_registration", icon: MeetingRoom, page_id: 85 },
-      { title: "Requirements Panel", link: "/requirements_form", icon: Assignment, page_id: 51 },
-    ]},
-    { key: "settingsCommunication", label: "Settings & Communication", icon: Campaign, items: [
-      { title: `${shortTerm} Profile`, link: "/settings", icon: Settings, page_id: 74 },
-      { title: "Email Sender", link: "/email_template_manager", icon: Email, page_id: 67 },
-      { title: "Announcement", link: "/announcement", icon: Campaign, page_id: 66 },
-      { title: "Signature Upload", link: "/signature_upload", icon: Settings, page_id: 114 },
-    ]},
-    { key: "sectionSemester", label: "Section & Semester", icon: Class, items: [
-      { title: "Section Panel Form", link: "/section_panel", icon: Class, page_id: 57 },
-      { title: "Semester Panel Form", link: "/semester_panel", icon: Timeline, page_id: 58 },
-      { title: "Change Grading Period", link: "/change_grade_period", icon: ChangeCircle, page_id: 14 },
-    ]},
-    { key: "yearSchool", label: "Year & School", icon: CalendarToday, items: [
-      { title: "Year Update Panel", link: "/year_update_panel", icon: Update, page_id: 65 },
-      { title: "Year Level Panel Form", link: "/year_level_panel", icon: Layers, page_id: 63 },
-      { title: "Year Panel Form", link: "/year_panel", icon: CalendarToday, page_id: 64 },
-      { title: "School Year Activator", link: "/school_year_activator_panel", icon: EventAvailable, page_id: 54 },
-      { title: "School Year Panel", link: "/school_year_panel", icon: DateRange, page_id: 55 },
-    ]},
-    { key: "paymentEvaluation", label: "Payment & Evaluation", icon: Assessment, items: [
-      { title: "Evaluation Management", link: "/evaluation_crud", icon: HelpOutline, page_id: 23 },
-      { title: "TOSF CRUD", link: "/tosf_crud", icon: HelpOutline, page_id: 99 },
-      { title: "Payment Exporting Module", link: "/payment_exporting_module", icon: HelpOutline, page_id: 116 },
-      { title: "Student Scholarship List", link: "/student_scholarship_list", icon: HelpOutline, page_id: 116 },
-      { title: "Receipt Counter Assignment", link: "/assign_receipt_counter", icon: HelpOutline, page_id: 122 },
-      { title: "Matriculation Payment", link: "/matriculation_payment", icon: HelpOutline, page_id: 121 },
-    ]},
+    {
+      key: "roomRequirements", label: "Room & Requirements", icon: MeetingRoom, items: [
+        { title: "Room Form", link: "/super_admin_room_registration", icon: MeetingRoom, page_id: 85 },
+        { title: "Requirements Panel", link: "/requirements_form", icon: Assignment, page_id: 51 },
+      ]
+    },
+    {
+      key: "settingsCommunication", label: "Settings & Communication", icon: Campaign, items: [
+        { title: `${shortTerm} Profile`, link: "/settings", icon: Settings, page_id: 74 },
+        { title: "Email Sender", link: "/email_template_manager", icon: Email, page_id: 67 },
+        { title: "Announcement", link: "/announcement", icon: Campaign, page_id: 66 },
+        { title: "Signature Upload", link: "/signature_upload", icon: Settings, page_id: 114 },
+      ]
+    },
+    {
+      key: "sectionSemester", label: "Section & Semester", icon: Class, items: [
+        { title: "Section Panel Form", link: "/section_panel", icon: Class, page_id: 57 },
+        { title: "Semester Panel Form", link: "/semester_panel", icon: Timeline, page_id: 58 },
+        { title: "Change Grading Period", link: "/change_grade_period", icon: ChangeCircle, page_id: 14 },
+      ]
+    },
+    {
+      key: "yearSchool", label: "Year & School", icon: CalendarToday, items: [
+        { title: "Year Update Panel", link: "/year_update_panel", icon: Update, page_id: 65 },
+        { title: "Year Level Panel Form", link: "/year_level_panel", icon: Layers, page_id: 63 },
+        { title: "Year Panel Form", link: "/year_panel", icon: CalendarToday, page_id: 64 },
+        { title: "School Year Activator", link: "/school_year_activator_panel", icon: EventAvailable, page_id: 54 },
+        { title: "School Year Panel", link: "/school_year_panel", icon: DateRange, page_id: 55 },
+      ]
+    },
+    {
+      key: "paymentEvaluation", label: "Payment & Evaluation", icon: Assessment, items: [
+        { title: "Evaluation Management", link: "/evaluation_crud", icon: HelpOutline, page_id: 23 },
+        { title: "TOSF CRUD", link: "/tosf_crud", icon: HelpOutline, page_id: 99 },
+        { title: "Payment Exporting Module", link: "/payment_exporting_module", icon: HelpOutline, page_id: 116 },
+        { title: "Student Scholarship List", link: "/student_scholarship_list", icon: HelpOutline, page_id: 116 },
+        { title: "Receipt Counter Assignment", link: "/assign_receipt_counter", icon: HelpOutline, page_id: 122 },
+        { title: "Matriculation Payment", link: "/matriculation_payment", icon: HelpOutline, page_id: 121 },
+      ]
+    },
   ];
 
   const accountMenuGroups = [
-    { key: "accountSettings", label: "Settings", icon: Settings, items: [
-      { title: "Settings", link: "/registrar_reset_password", icon: Settings, page_id: 73 },
-      { title: "Student Grade File", link: "/student_grade_file", icon: Settings, page_id: 126 },
-    ]},
-    { key: "accountCreation", label: "Account Creation", icon: PersonAdd, items: [
-      { title: "Add Faculty Accounts", link: "/register_prof", icon: PersonAdd, page_id: 70 },
-      { title: "Add Registrar Account", link: "/register_registrar", icon: PersonAdd, page_id: 71 },
-      { title: "Add Student Account", link: "/register_student", icon: PersonAdd, page_id: 72 },
-      { title: "Professor Education", link: "/superadmin_professor_education", icon: PersonAdd, page_id: 109 },
-    ]},
-    { key: "accountInformation", label: "Account Information", icon: Info, items: [
-      { title: "Applicant Information", link: "/super_admin_applicant_dashboard1", icon: Info, page_id: 75 },
-      { title: "Upload Requirements", link: "/super_admin_requirements_uploader", icon: Info, page_id: 84 },
-      { title: "Student Information", link: "/super_admin_student_dashboard1", icon: Info, page_id: 86 },
-    ]},
-    { key: "userPageAccess", label: "User Access & Page Table", icon: Security, items: [
-      { title: "User Page Access", link: "/user_page_access", icon: Security, page_id: 72 },
-      { title: "Page Table", link: "/page_crud", icon: TableChart, page_id: 72 },
-    ]},
-    { key: "resetPasswordManagement", label: "Reset Password", icon: SupervisorAccount, items: [
-      { title: "Applicant Reset Password", link: "/superadmin_applicant_reset_password", icon: People, page_id: 81 },
-      { title: "Student Reset Password", link: "/superadmin_student_reset_password", icon: School, page_id: 91 },
-      { title: "Faculty Reset Password", link: "/superadmin_faculty_reset_password", icon: SupervisorAccount, page_id: 82 },
-      { title: "Registrar Reset Password", link: "/superadmin_registrar_reset_password", icon: AdminPanelSettings, page_id: 83 },
-    ]},
+    {
+      key: "accountSettings", label: "Settings", icon: Settings, items: [
+        { title: "Settings", link: "/registrar_reset_password", icon: Settings, page_id: 73 },
+        { title: "Student Grade File", link: "/student_grade_file", icon: Settings, page_id: 126 },
+      ]
+    },
+    {
+      key: "accountCreation", label: "Account Creation", icon: PersonAdd, items: [
+        { title: "Add Faculty Accounts", link: "/register_prof", icon: PersonAdd, page_id: 70 },
+        { title: "Add Registrar Account", link: "/register_registrar", icon: PersonAdd, page_id: 71 },
+        { title: "Add Student Account", link: "/register_student", icon: PersonAdd, page_id: 72 },
+        { title: "Professor Education", link: "/superadmin_professor_education", icon: PersonAdd, page_id: 109 },
+      ]
+    },
+    {
+      key: "accountInformation", label: "Account Information", icon: Info, items: [
+        { title: "Applicant Information", link: "/super_admin_applicant_dashboard1", icon: Info, page_id: 75 },
+        { title: "Upload Requirements", link: "/super_admin_requirements_uploader", icon: Info, page_id: 84 },
+        { title: "Student Information", link: "/super_admin_student_dashboard1", icon: Info, page_id: 86 },
+      ]
+    },
+    {
+      key: "userPageAccess", label: "User Access & Page Table", icon: Security, items: [
+        { title: "User Page Access", link: "/user_page_access", icon: Security, page_id: 72 },
+        { title: "Page Table", link: "/page_crud", icon: TableChart, page_id: 72 },
+      ]
+    },
+    {
+      key: "resetPasswordManagement", label: "Reset Password", icon: SupervisorAccount, items: [
+        { title: "Applicant Reset Password", link: "/superadmin_applicant_reset_password", icon: People, page_id: 81 },
+        { title: "Student Reset Password", link: "/superadmin_student_reset_password", icon: School, page_id: 91 },
+        { title: "Faculty Reset Password", link: "/superadmin_faculty_reset_password", icon: SupervisorAccount, page_id: 82 },
+        { title: "Registrar Reset Password", link: "/superadmin_registrar_reset_password", icon: AdminPanelSettings, page_id: 83 },
+      ]
+    },
   ];
 
   const sectionMenus = {
@@ -624,8 +657,8 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
               {role === "student"
                 ? `Student No: ${personData?.student_number || "—"}`
                 : role === "applicant"
-                ? `Applicant No: ${personData?.applicant_number || "—"}`
-                : `ID: ${personData?.employee_id || "—"}`}
+                  ? `Applicant No: ${personData?.applicant_number || "—"}`
+                  : `ID: ${personData?.employee_id || "—"}`}
             </div>
           </div>
         }
@@ -656,12 +689,12 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
               {role === "registrar"
                 ? accessDescription || "Administrator"
                 : role === "student"
-                ? `Student · ${personData?.student_number || ""}`
-                : role === "faculty"
-                ? `Faculty · ${personData?.employee_id || ""}`
-                : role
-                  ? role.charAt(0).toUpperCase() + role.slice(1)
-                  : ""}
+                  ? `Student · ${personData?.student_number || ""}`
+                  : role === "faculty"
+                    ? `Faculty · ${personData?.employee_id || ""}`
+                    : role
+                      ? role.charAt(0).toUpperCase() + role.slice(1)
+                      : ""}
             </div>
           </div>
         </div>
@@ -737,7 +770,7 @@ const SideBar = ({ setIsAuthenticated, profileImage, setProfileImage }) => {
               }}
             />
             <NavItem to="/requirements_uploader" icon={CloudUploadIcon} label="Upload Requirements" active={isActivePrefix("/requirements_uploader")} />
-            <div className="sb-divider" />
+          <div className="sb-section-label">Setting</div>
             <NavItem to="/applicant_reset_password" icon={LockResetIcon} label="Change Password" active={isActivePrefix("/applicant_reset_password")} />
           </>
         )}
