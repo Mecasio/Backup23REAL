@@ -87,7 +87,8 @@ const MedicalRequirements = () => {
     if (settings.title_color) setTitleColor(settings.title_color);
     if (settings.subtitle_color) setSubtitleColor(settings.subtitle_color);
     if (settings.border_color) setBorderColor(settings.border_color);
-    if (settings.main_button_color) setMainButtonColor(settings.main_button_color);
+    if (settings.main_button_color)
+      setMainButtonColor(settings.main_button_color);
     if (settings.sub_button_color) setSubButtonColor(settings.sub_button_color);
     if (settings.stepper_color) setStepperColor(settings.stepper_color);
 
@@ -103,28 +104,36 @@ const MedicalRequirements = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(2);
   const [clickedSteps, setClickedSteps] = useState(
-    Array(tabs1.length).fill(false)
+    Array(tabs1.length).fill(false),
   );
 
   // ------------------------------------
   const [requirements, setRequirements] = useState([]);
 
- useEffect(() => {
-    axios.get(`${API_BASE_URL}/api/requirements`)
+  const [selectedPerson, setSelectedPerson] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`${API_BASE_URL}/api/requirements`)
       .then((res) => {
         const allRequirements = res.data;
 
         if (selectedPerson) {
           // Filter by applicant's applyingAs value OR applicant_type === 0
           const filtered = allRequirements.filter(
-            (req) => Number(req.applicant_type) === Number(selectedPerson.applyingAs) || Number(req.applicant_type) === 0
+            (req) =>
+              Number(req.applicant_type) ===
+                Number(selectedPerson.applyingAs) ||
+              Number(req.applicant_type) === 0,
           );
-          
+
           setRequirements(filtered);
         } else {
           // Default filter when no applicant is selected
           const filtered = allRequirements.filter(
-            (req) => Number(req.applicant_type) === 1 || Number(req.applicant_type) === 0
+            (req) =>
+              Number(req.applicant_type) === 1 ||
+              Number(req.applicant_type) === 0,
           );
           setRequirements(filtered);
         }
@@ -150,7 +159,7 @@ const MedicalRequirements = () => {
   const fetchByPersonId = async (personID) => {
     try {
       const res = await axios.get(
-        `${API_BASE_URL}/api/student_data_as_applicant/${personID}`
+        `${API_BASE_URL}/api/student_data_as_applicant/${personID}`,
       );
       const data = res.data;
 
@@ -175,7 +184,6 @@ const MedicalRequirements = () => {
   const [persons, setPersons] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFiles, setSelectedFiles] = useState({});
-  const [selectedPerson, setSelectedPerson] = useState(null);
   const [remarksMap, setRemarksMap] = useState({});
   const [userID, setUserID] = useState("");
   const [user, setUser] = useState("");
@@ -281,7 +289,7 @@ const MedicalRequirements = () => {
   const checkAccess = async (employeeID) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/page_access/${employeeID}/${pageId}`
+        `${API_BASE_URL}/api/page_access/${employeeID}/${pageId}`,
       );
       if (response.data && response.data.page_privilege === 1) {
         setHasAccess(true);
@@ -356,10 +364,14 @@ const MedicalRequirements = () => {
   const handleConfirmAction = async () => {
     if (confirmAction === "upload") {
       await handleUploadSubmit(targetDoc);
-      console.log(`📂 Document uploaded by: ${localStorage.getItem("username")}`);
+      console.log(
+        `📂 Document uploaded by: ${localStorage.getItem("username")}`,
+      );
     } else if (confirmAction === "delete") {
       await handleDelete(targetDoc.upload_id);
-      console.log(`🗑️ Document deleted by: ${localStorage.getItem("username")}`);
+      console.log(
+        `🗑️ Document deleted by: ${localStorage.getItem("username")}`,
+      );
     }
     setConfirmOpen(false);
   };
@@ -372,7 +384,7 @@ const MedicalRequirements = () => {
     if (!student_number) return;
     try {
       const res = await axios.get(
-        `${API_BASE_URL}/uploads/by-student/${student_number}`
+        `${API_BASE_URL}/uploads/by-student/${student_number}`,
       );
       setUploads(res.data);
     } catch (err) {
@@ -409,7 +421,7 @@ const MedicalRequirements = () => {
     const match = persons.find((p) =>
       `${p.first_name} ${p.middle_name} ${p.last_name} ${p.emailAddress} ${p.student_number || ""}`
         .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+        .includes(searchQuery.toLowerCase()),
     );
 
     if (match) {
@@ -443,7 +455,7 @@ const MedicalRequirements = () => {
   const fetchPersons = async () => {
     try {
       const res = await axios.get(
-        `${API_BASE_URL}/api/student_upload_documents_data`
+        `${API_BASE_URL}/api/student_upload_documents_data`,
       );
       setPersons(res.data);
     } catch (err) {
@@ -465,8 +477,8 @@ const MedicalRequirements = () => {
         prev.map((u) =>
           u.upload_id === uploadId
             ? { ...u, status: parseInt(remarkValue, 10), remarks }
-            : u
-        )
+            : u,
+        ),
       );
 
       setEditingRemarkId(null);
@@ -489,7 +501,7 @@ const MedicalRequirements = () => {
         {
           document_status: newStatus,
           user_id: localStorage.getItem("person_id"),
-        }
+        },
       );
 
       // ✅ Re-fetch full person data to refresh evaluator + document_status in one call
@@ -585,9 +597,7 @@ const MedicalRequirements = () => {
         >
           {doc.label}
           {Number(doc.is_optional) === 1 && (
-            <span style={{ marginLeft: 2 }}>
-              (Optional)
-            </span>
+            <span style={{ marginLeft: 2 }}>(Optional)</span>
           )}
         </TableCell>
 
@@ -611,11 +621,14 @@ const MedicalRequirements = () => {
                 await axios.put(`${API_BASE_URL}/uploads/remarks/${uploadId}`, {
                   remarks: finalRemark,
                   status:
-                    uploads.find((u) => u.upload_id === uploadId)?.status || "0",
+                    uploads.find((u) => u.upload_id === uploadId)?.status ||
+                    "0",
                   user_id: userID,
                 });
                 if (selectedPerson?.applicant_number) {
-                  await fetchUploadsByApplicantNumber(selectedPerson.applicant_number);
+                  await fetchUploadsByApplicantNumber(
+                    selectedPerson.applicant_number,
+                  );
                 }
                 setEditingRemarkId(null);
               }}
@@ -623,14 +636,20 @@ const MedicalRequirements = () => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   const finalRemark = (remarksMap[uploadId] || "").trim();
-                  await axios.put(`${API_BASE_URL}/uploads/remarks/${uploadId}`, {
-                    remarks: finalRemark,
-                    status:
-                      uploads.find((u) => u.upload_id === uploadId)?.status || "0",
-                    user_id: userID,
-                  });
+                  await axios.put(
+                    `${API_BASE_URL}/uploads/remarks/${uploadId}`,
+                    {
+                      remarks: finalRemark,
+                      status:
+                        uploads.find((u) => u.upload_id === uploadId)?.status ||
+                        "0",
+                      user_id: userID,
+                    },
+                  );
                   if (selectedPerson?.applicant_number) {
-                    await fetchUploadsByApplicantNumber(selectedPerson.applicant_number);
+                    await fetchUploadsByApplicantNumber(
+                      selectedPerson.applicant_number,
+                    );
                   }
                   setEditingRemarkId(null);
                 }
@@ -707,7 +726,11 @@ const MedicalRequirements = () => {
                   disabled
                   variant="contained"
                   onClick={() => handleStatusChange(uploaded.upload_id, "1")}
-                  sx={{ ...buttonStyle, backgroundColor: "green", color: "white" }}
+                  sx={{
+                    ...buttonStyle,
+                    backgroundColor: "green",
+                    color: "white",
+                  }}
                 >
                   Verified
                 </Button>
@@ -715,7 +738,11 @@ const MedicalRequirements = () => {
                   disabled
                   variant="contained"
                   onClick={() => handleStatusChange(uploaded.upload_id, "2")}
-                  sx={{ ...buttonStyle, backgroundColor: "red", color: "white" }}
+                  sx={{
+                    ...buttonStyle,
+                    backgroundColor: "red",
+                    color: "white",
+                  }}
                 >
                   Rejected
                 </Button>
@@ -736,14 +763,22 @@ const MedicalRequirements = () => {
         <TableCell style={{ border: `2px solid ${borderColor}` }}>
           {selectedPerson?.student_number || person?.student_number
             ? `[${selectedPerson?.student_number || person?.student_number}] ${(
-              selectedPerson?.last_name || person?.last_name || ""
-            ).toUpperCase()}, ${(
-              selectedPerson?.first_name || person?.first_name || ""
-            ).toUpperCase()} ${(
-              selectedPerson?.middle_name || person?.middle_name || ""
-            ).toUpperCase()} ${(
-              selectedPerson?.extension || person?.extension || ""
-            ).toUpperCase()}`
+                selectedPerson?.last_name ||
+                person?.last_name ||
+                ""
+              ).toUpperCase()}, ${(
+                selectedPerson?.first_name ||
+                person?.first_name ||
+                ""
+              ).toUpperCase()} ${(
+                selectedPerson?.middle_name ||
+                person?.middle_name ||
+                ""
+              ).toUpperCase()} ${(
+                selectedPerson?.extension ||
+                person?.extension ||
+                ""
+              ).toUpperCase()}`
             : ""}
         </TableCell>
 
@@ -784,11 +819,15 @@ const MedicalRequirements = () => {
                   disabled
                   onClick={() => handleConfirmDelete(uploaded)}
                   sx={{
-                    backgroundColor: uploaded.canDelete ? "maroon" : "lightgray",
+                    backgroundColor: uploaded.canDelete
+                      ? "maroon"
+                      : "lightgray",
                     color: uploaded.canDelete ? "white" : "#888",
                     cursor: uploaded.canDelete ? "pointer" : "not-allowed",
                     "&:hover": {
-                      backgroundColor: uploaded.canDelete ? "#600000" : "lightgray",
+                      backgroundColor: uploaded.canDelete
+                        ? "#600000"
+                        : "lightgray",
                     },
                   }}
                 >
@@ -907,9 +946,7 @@ const MedicalRequirements = () => {
                 </Typography>
               </Box>
             </Card>
-            {index < tabs1.length - 1 && (
-              <Box sx={{ flex: 0.1, mx: 1 }} />
-            )}
+            {index < tabs1.length - 1 && <Box sx={{ flex: 0.1, mx: 1 }} />}
           </React.Fragment>
         ))}
       </Box>
@@ -942,7 +979,9 @@ const MedicalRequirements = () => {
                     textDecoration: "underline",
                   }}
                 >
-                  {selectedPerson?.student_number || person?.student_number || "N/A"}
+                  {selectedPerson?.student_number ||
+                    person?.student_number ||
+                    "N/A"}
                 </span>
               </TableCell>
 
@@ -963,11 +1002,27 @@ const MedicalRequirements = () => {
                     textDecoration: "underline",
                   }}
                 >
-                  {(selectedPerson?.last_name || person?.last_name || "").toUpperCase()}
+                  {(
+                    selectedPerson?.last_name ||
+                    person?.last_name ||
+                    ""
+                  ).toUpperCase()}
                   ,&nbsp;
-                  {(selectedPerson?.first_name || person?.first_name || "").toUpperCase()}{" "}
-                  {(selectedPerson?.middle_name || person?.middle_name || "").toUpperCase()}{" "}
-                  {(selectedPerson?.extension || person?.extension || "").toUpperCase()}
+                  {(
+                    selectedPerson?.first_name ||
+                    person?.first_name ||
+                    ""
+                  ).toUpperCase()}{" "}
+                  {(
+                    selectedPerson?.middle_name ||
+                    person?.middle_name ||
+                    ""
+                  ).toUpperCase()}{" "}
+                  {(
+                    selectedPerson?.extension ||
+                    person?.extension ||
+                    ""
+                  ).toUpperCase()}
                 </span>
               </TableCell>
             </TableRow>
@@ -1065,9 +1120,7 @@ const MedicalRequirements = () => {
                 <MenuItem value="">
                   <em>Select Applying</em>
                 </MenuItem>
-                <MenuItem value="1">
-                  Senior High School Graduate
-                </MenuItem>
+                <MenuItem value="1">Senior High School Graduate</MenuItem>
                 <MenuItem value="2">
                   Senior High School Graduating Student
                 </MenuItem>
@@ -1077,18 +1130,10 @@ const MedicalRequirements = () => {
                 <MenuItem value="4">
                   Transferee from other University/College
                 </MenuItem>
-                <MenuItem value="5">
-                  Cross Enrolee Student
-                </MenuItem>
-                <MenuItem value="6">
-                  Foreign Applicant/Student
-                </MenuItem>
-                <MenuItem value="7">
-                  Baccalaureate Graduate
-                </MenuItem>
-                <MenuItem value="8">
-                  Master Degree Graduate
-                </MenuItem>
+                <MenuItem value="5">Cross Enrolee Student</MenuItem>
+                <MenuItem value="6">Foreign Applicant/Student</MenuItem>
+                <MenuItem value="7">Baccalaureate Graduate</MenuItem>
+                <MenuItem value="8">Master Degree Graduate</MenuItem>
               </TextField>
             </Box>
 
@@ -1115,21 +1160,31 @@ const MedicalRequirements = () => {
                 InputProps={{ sx: { height: 35 } }}
                 inputProps={{ style: { padding: "4px 8px", fontSize: "12px" } }}
               >
-                <MenuItem value=""><em>Select Document Status</em></MenuItem>
+                <MenuItem value="">
+                  <em>Select Document Status</em>
+                </MenuItem>
                 <MenuItem value="On Process">On Process</MenuItem>
-                <MenuItem value="Documents Verified & ECAT">Documents Verified &amp; ECAT</MenuItem>
-                <MenuItem value="Disapproved / Program Closed">Disapproved / Program Closed</MenuItem>
+                <MenuItem value="Documents Verified & ECAT">
+                  Documents Verified &amp; ECAT
+                </MenuItem>
+                <MenuItem value="Disapproved / Program Closed">
+                  Disapproved / Program Closed
+                </MenuItem>
               </TextField>
 
               {/* ✅ Evaluator info — uses flat structure returned by /api/student_data_as_applicant/:id */}
               {person?.evaluator?.evaluator_email && (
                 <Typography variant="caption" sx={{ marginLeft: 1 }}>
                   Status Changed By:{" "}
-                  {person.evaluator.evaluator_email.replace(/@gmail\.com$/i, "")}
+                  {person.evaluator.evaluator_email.replace(
+                    /@gmail\.com$/i,
+                    "",
+                  )}
                   {/* ✅ evaluator_lname/fname/mname available if added to backend SELECT */}
                   {person.evaluator.evaluator_lname && (
                     <>
-                      {" "}({person.evaluator.evaluator_lname},{" "}
+                      {" "}
+                      ({person.evaluator.evaluator_lname},{" "}
                       {person.evaluator.evaluator_fname}{" "}
                       {person.evaluator.evaluator_mname})
                     </>
@@ -1167,14 +1222,24 @@ const MedicalRequirements = () => {
                   }
                   sx={{ width: 200 }}
                   InputProps={{ sx: { height: 38 } }}
-                  inputProps={{ style: { padding: "4px 8px", fontSize: "12px" } }}
+                  inputProps={{
+                    style: { padding: "4px 8px", fontSize: "12px" },
+                  }}
                 >
-                  <MenuItem value=""><em>Select Documents</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select Documents</em>
+                  </MenuItem>
                   {requirements.map((req) => (
                     <MenuItem key={req.id} value={req.id}>
                       {req.description}
                       {req.is_optional === 1 && (
-                        <span style={{ color: "#999", fontStyle: "italic", marginLeft: 6 }}>
+                        <span
+                          style={{
+                            color: "#999",
+                            fontStyle: "italic",
+                            marginLeft: 6,
+                          }}
+                        >
                           (Optional)
                         </span>
                       )}
@@ -1218,9 +1283,15 @@ const MedicalRequirements = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
-                  title={selectedFiles.file ? selectedFiles.file.name : "No file selected"}
+                  title={
+                    selectedFiles.file
+                      ? selectedFiles.file.name
+                      : "No file selected"
+                  }
                 >
-                  {selectedFiles.file ? selectedFiles.file.name : "No file selected"}
+                  {selectedFiles.file
+                    ? selectedFiles.file.name
+                    : "No file selected"}
                 </Box>
 
                 <Button
@@ -1302,22 +1373,29 @@ const MedicalRequirements = () => {
           sx={{ width: "100%", border: `2px solid ${borderColor}` }}
         >
           <Table>
-            <TableHead sx={{ backgroundColor: settings?.header_color || "#1976d2" }}>
+            <TableHead
+              sx={{ backgroundColor: settings?.header_color || "#1976d2" }}
+            >
               <TableRow>
-                {["Document Type", "Remarks", "Status", "Date and Time Submitted", "User", "Action"].map(
-                  (header) => (
-                    <TableCell
-                      key={header}
-                      sx={{
-                        color: "white",
-                        textAlign: "Center",
-                        border: `2px solid ${borderColor}`,
-                      }}
-                    >
-                      {header}
-                    </TableCell>
-                  )
-                )}
+                {[
+                  "Document Type",
+                  "Remarks",
+                  "Status",
+                  "Date and Time Submitted",
+                  "User",
+                  "Action",
+                ].map((header) => (
+                  <TableCell
+                    key={header}
+                    sx={{
+                      color: "white",
+                      textAlign: "Center",
+                      border: `2px solid ${borderColor}`,
+                    }}
+                  >
+                    {header}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -1326,8 +1404,8 @@ const MedicalRequirements = () => {
                   label: doc.description,
                   key: doc.short_label || doc.description.replace(/\s+/g, ""),
                   id: doc.id,
-                  is_optional: doc.is_optional
-                })
+                  is_optional: doc.is_optional,
+                }),
               )}
             </TableBody>
           </Table>
@@ -1364,7 +1442,9 @@ const MedicalRequirements = () => {
               <>
                 Are you sure you want to delete{" "}
                 <strong>
-                  {targetDoc?.label || targetDoc?.short_label || targetDoc?.file_path}
+                  {targetDoc?.label ||
+                    targetDoc?.short_label ||
+                    targetDoc?.file_path}
                 </strong>
                 ?<br />
                 Deleted by: <strong>{localStorage.getItem("username")}</strong>
@@ -1375,7 +1455,11 @@ const MedicalRequirements = () => {
             <Button onClick={() => setConfirmOpen(false)} color="error">
               Cancel
             </Button>
-            <Button onClick={handleConfirmAction} color="success" variant="contained">
+            <Button
+              onClick={handleConfirmAction}
+              color="success"
+              variant="contained"
+            >
               Yes, Confirm
             </Button>
           </DialogActions>
